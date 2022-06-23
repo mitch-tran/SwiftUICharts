@@ -13,9 +13,15 @@ import SwiftUI
 internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     
     @ObservedObject private var chartData: T
+    private var lastDataPoint: T.DataPoint?
+    private var prefixView: AnyView?
+    private var padding: CGFloat?
     
-    init(chartData: T) {
+    init(chartData: T, lastDataPoint: T.DataPoint?, prefixView: AnyView?, padding: CGFloat?) {
         self.chartData = chartData
+        self.lastDataPoint = lastDataPoint
+        self.prefixView = prefixView
+        self.padding = padding
     }
     
     var titleBox: some View {
@@ -29,21 +35,31 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
         }
     }
     var touchOverlay: some View {
-        VStack(alignment: .trailing) {
+        VStack(alignment: .trailing, spacing: 0) {
             if chartData.infoView.isTouchCurrent {
                 ForEach(chartData.infoView.touchOverlayInfo, id: \.id) { point in
-                    chartData.infoValueUnit(info: point)
-                        .font(chartData.chartStyle.infoBoxValueFont)
-                        .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    HStack {
+                        prefixView
+                        chartData.infoValueUnit(info: point)
+                            .font(chartData.chartStyle.infoBoxValueFont)
+                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    }
                     chartData.infoDescription(info: point)
                         .font(chartData.chartStyle.infoBoxDescriptionFont)
                         .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
                 }
             } else {
-                Text("")
-                    .font(chartData.chartStyle.infoBoxValueFont)
-                Text("")
-                    .font(chartData.chartStyle.infoBoxDescriptionFont)
+                if let lastDataPoint = lastDataPoint {
+                    HStack {
+                        prefixView
+                        chartData.infoValueUnit(info: lastDataPoint)
+                            .font(chartData.chartStyle.infoBoxValueFont)
+                            .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    }
+                    chartData.infoDescription(info: lastDataPoint)
+                        .font(chartData.chartStyle.infoBoxDescriptionFont)
+                        .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
+                }
             }
         }
     }
@@ -51,37 +67,38 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
     internal func body(content: Content) -> some View {
         Group {
             #if !os(tvOS)
-            if chartData.isGreaterThanTwo() {
-                switch chartData.chartStyle.infoBoxPlacement {
-                case .floating:
-                    VStack(alignment: .leading) {
-                        titleBox
-                        content
-                    }
-                case .infoBox:
-                    VStack(alignment: .leading) {
-                        titleBox
-                        content
-                    }
-                case .header:
-                    VStack(alignment: .leading) {
-                        HStack(spacing: 0) {
-                            HStack(spacing: 0) {
-                                titleBox
-                                Spacer()
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            Spacer()
-                            HStack(spacing: 0) {
-                                Spacer()
-                                touchOverlay
-                            }
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                        }
-                        content
-                    }
+            switch chartData.chartStyle.infoBoxPlacement {
+            case .floating:
+                VStack(alignment: .leading) {
+                    titleBox
+                    content
                 }
-            } else { content }
+            case .infoBox:
+                VStack(alignment: .leading) {
+                    titleBox
+                    content
+                }
+            case .header:
+                VStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        HStack(spacing: 0) {
+                            titleBox
+                            Spacer()
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        Spacer()
+                        HStack(spacing: 0) {
+                            Spacer()
+                            touchOverlay
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        
+                    }
+                    .padding(padding ?? 0)
+
+                    content
+                }
+            }
             #elseif os(tvOS)
             if chartData.isGreaterThanTwo() {
                 VStack(alignment: .leading) {
@@ -106,7 +123,9 @@ extension View {
      - Returns: A  new view containing the chart with a view above
      to display metadata.
      */
-    public func headerBox<T:CTChartData>(chartData: T) -> some View {
-        self.modifier(HeaderBox(chartData: chartData))
+    public func headerBox<T:CTChartData>(chartData: T, lastDataPoint: T.DataPoint?,
+                                         prefixView: AnyView?, padding: CGFloat?) -> some View {
+        self.modifier(HeaderBox(chartData: chartData, lastDataPoint: lastDataPoint,
+                                prefixView: prefixView, padding: padding))
     }
 }
