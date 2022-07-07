@@ -22,6 +22,9 @@ public struct PieChartDataPoint: CTPieDataPoint {
     public var amount: Double = 0
     public var legendTag: String = ""
     
+    public var priceDiff: String?
+    public var color: Color?
+    
     /// Data model for a single data point for a pie chart.
     /// - Parameters:
     ///   - value: Value of the data point

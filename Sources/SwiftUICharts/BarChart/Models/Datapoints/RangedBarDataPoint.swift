@@ -21,6 +21,9 @@ public struct RangedBarDataPoint: CTRangedBarDataPoint {
     public var colour: ColourStyle
     public var legendTag: String = ""
     
+    public var priceDiff: String?
+    public var color: Color?
+    
     internal var _value: Double = 0
     internal var _valueOnly: Bool = false
     

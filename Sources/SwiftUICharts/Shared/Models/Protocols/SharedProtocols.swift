@@ -183,6 +183,10 @@ public protocol CTDataPointBaseProtocol: Hashable, Identifiable {
      */
     var date: Date? { get set }
     
+    var priceDiff: String? { get set }
+    
+    var color: Color? { get set }
+    
     /**
      Internal property that has to be exposed publicly through the protocol.
      

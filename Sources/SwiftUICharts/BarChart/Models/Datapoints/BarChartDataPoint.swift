@@ -22,6 +22,9 @@ public struct BarChartDataPoint: CTStandardBarDataPoint {
     public var colour: ColourStyle
     public var legendTag: String = ""
     
+    public var priceDiff: String?
+    public var color: Color?
+    
     // MARK: - Single colour
     /// Data model for a single data point with colour for use with a bar chart.
     /// - Parameters:

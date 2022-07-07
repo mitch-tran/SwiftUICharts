@@ -44,6 +44,11 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                             .font(chartData.chartStyle.infoBoxValueFont)
                             .foregroundColor(chartData.chartStyle.infoBoxValueColour)
                     }
+                    if let priceDiff = point.priceDiff {
+                        Text(priceDiff)
+                            .font(chartData.chartStyle.infoBoxDescriptionFont.bold())
+                            .foregroundColor(point.color)
+                    }
                     chartData.infoDescription(info: point)
                         .font(chartData.chartStyle.infoBoxDescriptionFont)
                         .foregroundColor(chartData.chartStyle.infoBoxDescriptionColour)
@@ -55,6 +60,11 @@ internal struct HeaderBox<T>: ViewModifier where T: CTChartData {
                         chartData.infoValueUnit(info: lastDataPoint)
                             .font(chartData.chartStyle.infoBoxValueFont)
                             .foregroundColor(chartData.chartStyle.infoBoxValueColour)
+                    }
+                    if let priceDiff = lastDataPoint.priceDiff {
+                        Text(priceDiff)
+                            .font(chartData.chartStyle.infoBoxDescriptionFont.bold())
+                            .foregroundColor(lastDataPoint.color)
                     }
                     chartData.infoDescription(info: lastDataPoint)
                         .font(chartData.chartStyle.infoBoxDescriptionFont)

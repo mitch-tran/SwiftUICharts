@@ -20,6 +20,9 @@ public struct StackedBarDataPoint: CTMultiBarDataPoint {
     public var group: GroupingData
     public var legendTag: String = ""
     
+    public var priceDiff: String?
+    public var color: Color?
+    
     /// Data model for a single data point with colour info for use with a stacked bar chart.
     /// - Parameters:
     ///   - value: Value of the data point.

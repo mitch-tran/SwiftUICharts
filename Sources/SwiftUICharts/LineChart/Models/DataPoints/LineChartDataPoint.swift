@@ -16,6 +16,8 @@ public struct LineChartDataPoint: CTStandardLineDataPoint, IgnoreMe {
     public var value: Double
     public var xAxisLabel: String?
     public var description: String?
+    public var priceDiff: String?
+    public var color: Color?
     public var date: Date?
     public var pointColour: PointColour?
     
@@ -34,12 +36,16 @@ public struct LineChartDataPoint: CTStandardLineDataPoint, IgnoreMe {
         value: Double,
         xAxisLabel: String? = nil,
         description: String? = nil,
+        priceDiff: String? = nil,
+        color: Color? = nil,
         date: Date? = nil,
         pointColour: PointColour? = nil
     ) {
         self.value = value
         self.xAxisLabel = xAxisLabel
         self.description = description
+        self.priceDiff = priceDiff
+        self.color = color
         self.date = date
         self.pointColour = pointColour
     }

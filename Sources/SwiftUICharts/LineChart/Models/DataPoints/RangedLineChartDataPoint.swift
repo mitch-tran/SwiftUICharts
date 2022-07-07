@@ -21,6 +21,9 @@ public struct RangedLineChartDataPoint: CTRangedLineDataPoint, IgnoreMe {
     public var date: Date?
     public var pointColour: PointColour?
     
+    public var priceDiff: String?
+    public var color: Color?
+    
     public var ignoreMe: Bool = false
     
     public var legendTag: String = ""
